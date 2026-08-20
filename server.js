@@ -19,20 +19,21 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // เชื่อมต่อฐานข้อมูล
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   port: Number(process.env.DB_PORT || 3306),
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'expense_tracker',
-  // Keep MySQL dates as Thailand local time instead of converting them to UTC.
   timezone: DATABASE_TIME_ZONE,
-  // Return date columns as their database strings. This avoids JavaScript applying
-  // the machine's local time zone while serializing the API response.
-  dateStrings: true
+  dateStrings: true,
+
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-const query = (sql, values = []) => db.promise().query(sql, values);
+const query = (sql, values = []) => db.query(sql, values);
 
 const hashPassword = (password, salt = crypto.randomBytes(16).toString('hex')) => new Promise((resolve, reject) => {
   crypto.scrypt(password, salt, 64, (err, key) => {
@@ -322,10 +323,6 @@ app.get('/api/balance', authenticate, (req, res) => {
 });
 
 const initialiseDatabase = async () => {
-  await new Promise((resolve, reject) =>
-    db.connect(err => err ? reject(err) : resolve())
-  );
-
   await query('SET time_zone = ?', [DATABASE_TIME_ZONE]);
 
   await query(`CREATE TABLE IF NOT EXISTS users (
@@ -346,7 +343,7 @@ const initialiseDatabase = async () => {
     INDEX idx_transactions_user_id_id (user_id, id)
   )`);
 
-  const [columns] = await query(`
+  const columns = await query(`
     SELECT COLUMN_NAME
     FROM information_schema.COLUMNS
     WHERE TABLE_SCHEMA = DATABASE()
