@@ -6,7 +6,6 @@ export default function TransactionList({ updateTrigger, onChanged }) {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [balance, setBalance] = useState(0);
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
@@ -24,31 +23,10 @@ export default function TransactionList({ updateTrigger, onChanged }) {
     }
   }, []);
 
-  const fetchbalance = useCallback(async () => {
-    try {
-      const response = await fetch(`${apiUrl}/api/balance`, {
-        headers: authHeaders(),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Unable to load balance");
-      }
-
-      const data = await response.json();
-
-      console.log("Balance:", data.balance);
-      setBalance(Number(data.balance));
-    } catch (error) {
-      console.error("Error fetching balance:", error);
-      setError("ไม่สามารถโหลด balance ได้");
-    }
-  }, []);
 
   useEffect(() => {
     fetchTransactions();
-    fetchbalance();
-  }, [fetchTransactions, fetchbalance, updateTrigger]);
+  }, [fetchTransactions, updateTrigger]);
 
   const startEdit = (transaction) => {
     setEditingTransaction(transaction);
