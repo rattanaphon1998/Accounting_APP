@@ -90,7 +90,7 @@ export default function SearchByDate() {
     return (
         <div className="app-shell">
           <header className="topbar"><div className="page-container topbar-inner">
-            <Link className="brand" to="/"><span className="brand-mark">฿</span><span>Ledgerly</span></Link>
+            <Link className="brand" to="/"><span className="brand-mark">฿</span><span>Expenses tracker</span></Link>
             <Link className="nav-link" to="/">กลับหน้าหลัก</Link>
           </div></header>
           <main className="page-container dashboard">

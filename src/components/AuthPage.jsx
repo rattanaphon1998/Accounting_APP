@@ -31,8 +31,8 @@ export default function AuthPage({ onAuthenticated }) {
 
   return <main className="auth-page">
     <form onSubmit={submit} className="auth-card">
-        <div className="brand"><span className="brand-mark">฿</span><span>Ledgerly</span></div>
-        <h1>{mode === 'login' ? 'ยินดีต้อนรับกลับมา' : 'เริ่มจัดการเงินของคุณ'}</h1>
+        <div className="brand"><span className="brand-mark">฿</span><span>Expenses tracker</span></div>
+        <h1>{mode === 'login' ? 'ยินดีต้อนรับ' : 'เริ่มจัดการเงินของคุณ'}</h1>
         <p>{mode === 'login' ? 'เข้าสู่ระบบเพื่อดูภาพรวมการเงินของคุณ' : 'สร้างบัญชีฟรี ใช้งานได้ทันที'}</p>
         <div className="auth-form">
         {mode === 'register' && <input className="app-input" placeholder="ชื่อ (ไม่บังคับ)" value={name} onChange={e => setName(e.target.value)} />}

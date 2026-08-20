@@ -6,7 +6,7 @@ function Nav({ user, onLogout }) {
       <div className="page-container topbar-inner">
         <Link className="brand" to="/">
           <span className="brand-mark">฿</span>
-          <span>Ledgerly</span>
+          <span>Expenses tracker</span>
         </Link>
         <nav className="nav-actions">
           <Link className="nav-link" to="/search">ค้นหารายการ</Link>
