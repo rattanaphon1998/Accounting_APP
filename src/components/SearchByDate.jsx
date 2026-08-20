@@ -144,7 +144,7 @@ export default function SearchByDate() {
               id="datetime2"
               type="date"
               className="app-input date-input"
-              value={dateTime}
+              value={dateTime2}
               onChange={handleDateTimeChange2}
               onClick={(event) => {
                 event.currentTarget.showPicker?.();
