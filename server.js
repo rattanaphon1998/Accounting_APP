@@ -301,26 +301,26 @@ app.delete('/api/transactions/:id', authenticate, async (req, res) => {
   }
 })
 
-app.get('/api/balance', authenticate, (req, res) => {
-  db.query(
-    'SELECT balance FROM users WHERE id = ?',
-    [req.user.id],
-    (err, users) => {
-      if (err) {
-        console.error('Database Error:', err);
-        return res.status(500).json({ error: 'Database Error' });
-      }
+// app.get('/api/balance', authenticate, (req, res) => {
+//   db.query(
+//     'SELECT balance FROM users WHERE id = ?',
+//     [req.user.id],
+//     (err, users) => {
+//       if (err) {
+//         console.error('Database Error:', err);
+//         return res.status(500).json({ error: 'Database Error' });
+//       }
 
-      if (users.length === 0) {
-        return res.status(404).json({ error: 'ไม่พบผู้ใช้' });
-      }
+//       if (users.length === 0) {
+//         return res.status(404).json({ error: 'ไม่พบผู้ใช้' });
+//       }
 
-      res.json({
-        balance: Number(users[0].balance || 0)
-      });
-    }
-  );
-});
+//       res.json({
+//         balance: Number(users[0].balance || 0)
+//       });
+//     }
+//   );
+// });
 
 const initialiseDatabase = async () => {
   await query('SET time_zone = ?', [DATABASE_TIME_ZONE]);
