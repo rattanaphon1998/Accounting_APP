@@ -121,9 +121,10 @@ app.get('/api/transactions', authenticate, (req, res) => {
 });
 
 app.post('/api/transactionsbydate', authenticate, (req, res) => {
-  const { date } = req.body;
+  const { date } = req.body.date;
+  const { end_Date } = req.body.end_date;
   const startDate = `${date} 00:00:00`;
-  const endDate = `${date} 23:59:59`;
+  const endDate = `${end_Date} 23:59:59`;
   console.log('🔍 Received date:', date);
   const sql = 'SELECT * FROM transactions WHERE user_id = ? AND created_at BETWEEN ? AND ?';
 

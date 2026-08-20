@@ -5,6 +5,7 @@ import { apiUrl, authHeaders } from "../auth";
 export default function SearchByDate() {
   const [transactions, setTransactions] = useState([]);
   const [dateTime, setDateTime] = useState("");
+  const [dateTime2, setDateTime2] = useState("");
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -16,7 +17,7 @@ export default function SearchByDate() {
       const response = await fetch(`${apiUrl}/api/transactionsbydate`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders() },
-        body: JSON.stringify({ date: dateTime }),
+        body: JSON.stringify({ date: dateTime ,end_date:dateTime2}),
       });
       if (response.ok) {
         const data = await response.json();
@@ -32,6 +33,9 @@ export default function SearchByDate() {
   };
   function handleDateTimeChange(event) {
     setDateTime(event.target.value);
+  }
+  function handleDateTimeChange2(event) {
+    setDateTime2(event.target.value);
   }
   const startEdit = (transaction) => {
     setEditingTransaction(transaction);
@@ -131,6 +135,17 @@ export default function SearchByDate() {
               className="app-input date-input"
               value={dateTime}
               onChange={handleDateTimeChange}
+              onClick={(event) => {
+                event.currentTarget.showPicker?.();
+              }}
+              required
+            />
+            <input
+              id="datetime2"
+              type="date"
+              className="app-input date-input"
+              value={dateTime}
+              onChange={handleDateTimeChange2}
               onClick={(event) => {
                 event.currentTarget.showPicker?.();
               }}
