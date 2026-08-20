@@ -12,7 +12,7 @@ export default function SearchByDate() {
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const fetchTransactions = async () => {
-    console.log("วันที่ที่ส่งมา:", { date: dateTime });
+    console.log("วันที่ที่ส่งมา:", { date: dateTime ,end_date:dateTime2});
     try {
       const response = await fetch(`${apiUrl}/api/transactionsbydate`, {
         method: "POST",
