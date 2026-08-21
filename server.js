@@ -1,5 +1,5 @@
 import express from 'express';
-import mysql from 'mysql2/promise';
+import mysql from 'mysql2';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import crypto from 'crypto';
@@ -33,7 +33,7 @@ const db = mysql.createPool({
   queueLimit: 0
 });
 
-const query = (sql, values = []) => db.query(sql, values);
+const query = (sql, values = []) => db.promise().query(sql, values);
 
 const hashPassword = (password, salt = crypto.randomBytes(16).toString('hex')) => new Promise((resolve, reject) => {
   crypto.scrypt(password, salt, 64, (err, key) => {
@@ -120,23 +120,38 @@ app.get('/api/transactions', authenticate, (req, res) => {
   });
 });
 
-app.post('/api/transactionsbydate', authenticate, (req, res) => {
-  const { date } = req.body.date;
-  const { end_Date } = req.body.end_date;
-  const startDate = `${date} 00:00:00`;
-  const endDate = `${end_Date} 23:59:59`;
-  console.log('🔍 Received date:', date, '->',end_Date);
-  const sql = 'SELECT * FROM transactions WHERE user_id = ? AND created_at BETWEEN ? AND ?';
+app.post('/api/transactionsbydate', authenticate, async (req, res) => {
+  try {
+    const { date, end_date } = req.body;
 
+    const startDate = `${date} 00:00:00`;
+    const endDate = `${end_date} 23:59:59`;
 
-  db.query(sql, [req.user.id, startDate, endDate], (err, results) => {
-    if (err) {
-      console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', err);
-      return res.status(500).json({ error: 'เกิดข้อผิดพลาดในการดึงข้อมูลจาก Database' });
-    }
+    console.log('🔍 Received date:', date, '->', end_date);
+
+    const sql = `
+      SELECT *
+      FROM transactions
+      WHERE user_id = ?
+        AND created_at BETWEEN ? AND ?
+    `;
+
+    const [results] = await query(
+      sql,
+      [req.user.id, startDate, endDate]
+    );
+
     console.log(results);
+
     res.json(results);
-  });
+
+  } catch (err) {
+    console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', err);
+
+    res.status(500).json({
+      error: 'เกิดข้อผิดพลาดในการดึงข้อมูลจาก Database'
+    });
+  }
 });
 
 
