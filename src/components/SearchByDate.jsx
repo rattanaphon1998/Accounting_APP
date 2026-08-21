@@ -140,6 +140,7 @@ export default function SearchByDate() {
               }}
               required
             />
+            <p>\t ถึง \t</p>
             <input
               id="datetime2"
               type="date"
