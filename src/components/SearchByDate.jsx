@@ -12,12 +12,12 @@ export default function SearchByDate() {
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const fetchTransactions = async () => {
-    console.log("วันที่ที่ส่งมา:", { date: dateTime ,end_date:dateTime2});
+    console.log("วันที่ที่ส่งมา:", { date: dateTime, end_date: dateTime2 });
     try {
       const response = await fetch(`${apiUrl}/api/transactionsbydate`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders() },
-        body: JSON.stringify({ date: dateTime ,end_date:dateTime2}),
+        body: JSON.stringify({ date: dateTime, end_date: dateTime2 }),
       });
       if (response.ok) {
         const data = await response.json();
@@ -129,31 +129,32 @@ export default function SearchByDate() {
               fetchTransactions();
             }}
           >
-            <input
-              id="datetime"
-              type="date"
-              className="app-input date-input"
-              value={dateTime}
-              onChange={handleDateTimeChange}
-              onClick={(event) => {
-                event.currentTarget.showPicker?.();
-              }}
-              required
-            />
-            <p>  ถึง  </p>
-            <input
-              id="datetime2"
-              type="date"
-              className="app-input date-input"
-              value={dateTime2}
-              onChange={handleDateTimeChange2}
-              onClick={(event) => {
-                event.currentTarget.showPicker?.();
-              }}
-              required
-            />
-
-            <button className="primary-button">ค้นหา</button>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <input
+                id="datetime"
+                type="date"
+                className="app-input date-input"
+                value={dateTime}
+                onChange={handleDateTimeChange}
+                onClick={(event) => {
+                  event.currentTarget.showPicker?.();
+                }}
+                required
+              />
+              <span style={{ whiteSpace: "nowrap" }}>ถึง</span>
+              <input
+                id="datetime2"
+                type="date"
+                className="app-input date-input"
+                value={dateTime2}
+                onChange={handleDateTimeChange2}
+                onClick={(event) => {
+                  event.currentTarget.showPicker?.();
+                }}
+                required
+              />
+              <button className="primary-button">ค้นหา</button>
+            </div>
           </form>
           <div className="overflow-x-auto">
             <table className="data-table">
